@@ -12,6 +12,39 @@ import { ThemeEvents, VariantUpdateEvent, ZoomMediaSelectedEvent } from '@theme/
  * @extends Component<Refs>
  */
 export class MediaGallery extends Component {
+  /**
+   * Extract human-readable variant option values from the event resource.
+   * @param {any} res
+   * @returns {string[]}
+   */
+  static extractVariantValues(res) {
+    if (!res) return [];
+    const values = [];
+    if (Array.isArray(res.selected_options)) {
+      /** @type {(opt: any) => void} */
+      const pushOpt = function (opt) {
+        if (opt && opt.value) values.push(String(opt.value));
+      };
+      res.selected_options.forEach(pushOpt);
+    }
+    ['option1', 'option2', 'option3'].forEach(function (k) {
+      if (res[k]) values.push(String(res[k]));
+    });
+    if (values.length === 0 && res.title) {
+      const titleParts = String(res.title).split(' / ');
+      if (titleParts.length) values.push(titleParts[0]);
+    }
+    /** @type {string[]} */
+    const out = [];
+    for (let i = 0; i < values.length; i++) {
+      const v = values[i];
+      if (!v) continue;
+      const s = String(v).trim().toLowerCase();
+      if (s.length) out.push(s);
+    }
+    return out;
+  }
+
   connectedCallback() {
     super.connectedCallback();
 
@@ -21,6 +54,44 @@ export class MediaGallery extends Component {
     target?.addEventListener(ThemeEvents.variantUpdate, this.#handleVariantUpdate, { signal });
     this.refs.zoomDialogComponent?.addEventListener(ThemeEvents.zoomMediaSelected, this.#handleZoomMediaSelected, {
       signal,
+    });
+
+    // On initial load, filter images by selected variant
+    let variantResource = null;
+    /** @type {any} */
+    const win = window;
+    if (win.ProductData && win.ProductData.selected_or_first_available_variant) {
+      variantResource = win.ProductData.selected_or_first_available_variant;
+    }
+    if (!variantResource && this.dataset.selectedVariant) {
+      try {
+        variantResource = JSON.parse(this.dataset.selectedVariant);
+      } catch {}
+    }
+    if (variantResource) {
+      this.filterSlidesByVariant(variantResource);
+    }
+  }
+
+  /**
+   * Filter gallery slides in place by variant option values
+   * @param {any} variantResource
+   */
+  filterSlidesByVariant(variantResource) {
+    const variantValues = MediaGallery.extractVariantValues(variantResource);
+    if (!variantValues.length) return;
+    const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
+    slideContainers.forEach((container) => {
+      const img = container.querySelector('img');
+      if (!img) return;
+      const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
+      const matches = variantValues.some(val => alt === val || alt.includes(val));
+      const el = /** @type {HTMLElement} */ (container);
+      if (!matches) {
+        el.style.display = 'none';
+      } else {
+        el.style.display = '';
+      }
     });
   }
 
@@ -38,14 +109,10 @@ export class MediaGallery extends Component {
    * @param {VariantUpdateEvent} event - The variant update event.
    */
   #handleVariantUpdate = (event) => {
-    const source = event.detail.data.html;
-
-    if (!source) return;
-    const newMediaGallery = source.querySelector('media-gallery');
-
-    if (!newMediaGallery) return;
-
-    this.replaceWith(newMediaGallery);
+    const resource = event.detail.resource || null;
+    if (resource) {
+      this.filterSlidesByVariant(resource);
+    }
   };
 
   /**
