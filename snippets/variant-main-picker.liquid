@@ -63,6 +63,9 @@
               {%- if variant_style == 'swatch' -%}
                 <span class="variant-option__swatch-value">{{ product_option.selected_value }}</span>
               {%- endif %}
+              {% if product_option.name contain 'Size' %}
+                  Size Charts
+              {% endif %}
             </legend>
             {%- for product_option_value in product_option.values -%}
               {% if product_option_value.size > longest_value and option_id_attribute %}
