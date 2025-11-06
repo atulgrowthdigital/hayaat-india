@@ -77,32 +77,42 @@ export class MediaGallery extends Component {
    * Filter gallery slides in place by variant option values
    * @param {any} variantResource
    */
-  filterSlidesByVariant(variantResource) {
-    const variantValues = MediaGallery.extractVariantValues(variantResource);
-    console.log('🧩 Variant values:', variantValues);
+filterSlidesByVariant(variantResource) {
+  const variantValues = MediaGallery.extractVariantValues(variantResource);
+  console.log('🎨 Selected Variant Values:', variantValues);
 
-    if (!variantValues.length) return;
-    const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
+  if (!variantValues.length) return;
 
-    slideContainers.forEach((container, index) => {
-      const img = container.querySelector('img');
-      if (!img) return;
+  const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
+  slideContainers.forEach((container, index) => {
+    const img = container.querySelector('img');
+    if (!img) return;
 
-      const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
-      const matches = variantValues.some(val => alt === val || alt.includes(val));
+    const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
 
-      console.log(`🖼️ Image ${index + 1}: alt="${alt}" → Match: ${matches}`);
+    // Flatten all variant values into one string (for multi-word variants like “Muted Purple Blue”)
+    const variantString = variantValues.join(' ').toLowerCase();
 
-      const el = /** @type {HTMLElement} */ (container);
-      if (!matches) {
-        el.style.display = 'none';
-        console.log('❌ Hidden:', alt);
-      } else {
-        el.style.display = '';
-        console.log('✅ Visible:', alt);
-      }
-    });
-  }
+    // Match if alt text contains any word or the full variant phrase
+    const matches =
+      alt.includes(variantString) ||
+      variantValues.some((val) => alt.includes(val));
+
+    console.log(
+      `🖼️ Image ${index + 1}: alt="${alt}" | Variant="${variantString}" | Match: ${matches}`
+    );
+
+    const el = /** @type {HTMLElement} */ (container);
+    if (!matches) {
+      el.style.display = 'none';
+      console.log('❌ Hidden:', alt);
+    } else {
+      el.style.display = '';
+      console.log('✅ Visible:', alt);
+    }
+  });
+}
+
 
   #controller = new AbortController();
 
