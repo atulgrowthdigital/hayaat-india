@@ -83,19 +83,6 @@
           "custom_open_cart": ""
         }
       },
-      "8813414294664651821": {
-        "type": "shopify://apps/xb-wishlist/blocks/wishlist_float/cc07f1e9-907b-431d-99f8-4fce3efa75f1",
-        "disabled": false,
-        "settings": {
-          "style": "style-1",
-          "button_color": "#fff",
-          "button_bg-color": "#ff0000",
-          "float_position": "bottom-right",
-          "custom_position": false,
-          "x_position": 0,
-          "y_position": 0
-        }
-      },
       "11413113034274116516": {
         "type": "shopify://apps/xb-wishlist/blocks/wishlist_collection/cc07f1e9-907b-431d-99f8-4fce3efa75f1",
         "disabled": false,
@@ -127,6 +114,19 @@
           "background_color_error": "#f35746",
           "notification_duration": 3000,
           "notification_animation": "fade"
+        }
+      },
+      "8813414294664651821": {
+        "type": "shopify://apps/xb-wishlist/blocks/wishlist_float/cc07f1e9-907b-431d-99f8-4fce3efa75f1",
+        "disabled": false,
+        "settings": {
+          "style": "style-1",
+          "button_color": "#fff",
+          "button_bg-color": "#000000",
+          "float_position": "bottom-right",
+          "custom_position": false,
+          "x_position": 0,
+          "y_position": 0
         }
       }
     },
