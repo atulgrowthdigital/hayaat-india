@@ -78,24 +78,23 @@ export class MediaGallery extends Component {
    * @param {any} variantResource
    */
 filterSlidesByVariant(variantResource) {
-  // Wait for DOM to update and the new color label to appear
   setTimeout(() => {
-    // 1️⃣ Try reading the color name from the DOM (most accurate)
+    // 1️⃣ Get the current color name from the DOM
     let colorName = '';
-    const colorEl = document.querySelector('[data-option-index="0"] .product-form__selected-value, .product__selected-option, [data-selected-option="Color"]');
+    const colorEl = document.querySelector(
+      '[data-option-index="0"] .product-form__selected-value, .product__selected-option, [data-selected-option="Color"]'
+    );
     if (colorEl) {
       colorName = colorEl.textContent.trim().toLowerCase();
     }
 
-    // 2️⃣ Fallback to variantResource if colorName not found
+    // 2️⃣ Fallback if DOM not ready yet
     const variantValues = MediaGallery.extractVariantValues(variantResource);
     const activeColor = colorName || variantValues[0] || '';
     console.log('🎨 Active Variant Color:', activeColor);
-    console.log('🧩 All Variant Values:', variantValues);
-
     if (!activeColor) return;
 
-    // 3️⃣ Filter product media
+    // 3️⃣ Hide main media slides that don't match
     const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
     slideContainers.forEach((container, index) => {
       const img = container.querySelector('img');
@@ -103,12 +102,20 @@ filterSlidesByVariant(variantResource) {
 
       const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
       const matches = alt.includes(activeColor);
-
       console.log(`🖼️ Image ${index + 1}: alt="${alt}" | Match: ${matches}`);
       container.style.display = matches ? '' : 'none';
     });
 
-    // 4️⃣ Reload slideshow after filtering
+    // 4️⃣ Hide / update thumbnails that don’t match
+    const thumbButtons = Array.from(this.querySelectorAll('.slideshow-controls__thumbnails button'));
+    thumbButtons.forEach((thumb, index) => {
+      const alt = (thumb.querySelector('img')?.getAttribute('alt') || '').toLowerCase().trim();
+      const matches = alt.includes(activeColor);
+      thumb.style.display = matches ? '' : 'none';
+      thumb.setAttribute('aria-selected', matches && index === 0 ? 'true' : 'false');
+    });
+
+    // 5️⃣ Reinitialize slideshow after filtering
     const slideshowEl = this.querySelector('slideshow-component');
     if (slideshowEl) {
       console.log('♻️ Reinitializing slideshow after variant update...');
@@ -117,9 +124,10 @@ filterSlidesByVariant(variantResource) {
       customElements.upgrade(newSlideshow);
     }
 
-    console.log('✅ Media gallery filter applied successfully for:', activeColor);
-  }, 400); // delay ensures DOM is ready (can adjust 300–500ms)
+    console.log('✅ Media gallery & thumbnails updated for:', activeColor);
+  }, 400); // Delay ensures DOM is fully updated
 }
+
 
 
 
