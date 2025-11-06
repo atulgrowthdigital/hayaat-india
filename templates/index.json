@@ -367,7 +367,7 @@
       },
       "name": "t:names.featured_product",
       "settings": {
-        "product": "product-3",
+        "product": "jerry-edition",
         "layout": "media-left",
         "color_scheme": "scheme-4",
         "padding-block-start": 0,
