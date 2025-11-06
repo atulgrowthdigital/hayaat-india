@@ -82,36 +82,33 @@ filterSlidesByVariant(variantResource) {
   console.log('🎨 Selected Variant Values:', variantValues);
 
   if (!variantValues.length) return;
-
   const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
+
   slideContainers.forEach((container, index) => {
     const img = container.querySelector('img');
     if (!img) return;
 
     const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
-
-    // Flatten all variant values into one string (for multi-word variants like “Muted Purple Blue”)
     const variantString = variantValues.join(' ').toLowerCase();
+    const matches = alt.includes(variantString) || variantValues.some((val) => alt.includes(val));
 
-    // Match if alt text contains any word or the full variant phrase
-    const matches =
-      alt.includes(variantString) ||
-      variantValues.some((val) => alt.includes(val));
-
-    console.log(
-      `🖼️ Image ${index + 1}: alt="${alt}" | Variant="${variantString}" | Match: ${matches}`
-    );
+    console.log(`🖼️ Image ${index + 1}: alt="${alt}" | Match: ${matches}`);
 
     const el = /** @type {HTMLElement} */ (container);
-    if (!matches) {
-      el.style.display = 'none';
-      console.log('❌ Hidden:', alt);
-    } else {
-      el.style.display = '';
-      console.log('✅ Visible:', alt);
-    }
+    el.style.display = matches ? '' : 'none';
   });
+
+  // 🔄 RELOAD the slideshow after variant filtering
+  const slideshowEl = this.querySelector('slideshow-component');
+  if (slideshowEl) {
+    console.log('♻️ Reinitializing slideshow...');
+    const newSlideshow = slideshowEl.cloneNode(true);
+    slideshowEl.replaceWith(newSlideshow);
+    // Ensure the custom element upgrades again
+    customElements.upgrade(newSlideshow);
+  }
 }
+
 
 
   #controller = new AbortController();
