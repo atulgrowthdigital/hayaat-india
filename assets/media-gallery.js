@@ -78,36 +78,45 @@ export class MediaGallery extends Component {
    * @param {any} variantResource
    */
 filterSlidesByVariant(variantResource) {
-  const variantValues = MediaGallery.extractVariantValues(variantResource);
-  console.log('🎨 Selected Variant Values:', variantValues);
+  // Delay filtering slightly to ensure the correct variant data and images are loaded
+  setTimeout(() => {
+    const variantValues = MediaGallery.extractVariantValues(variantResource);
+    console.log('🎨 Selected Variant Values:', variantValues);
 
-  if (!variantValues.length) return;
-  const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
+    if (!variantValues.length) return;
 
-  slideContainers.forEach((container, index) => {
-    const img = container.querySelector('img');
-    if (!img) return;
+    const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
+    const variantString = variantValues.join(' ').toLowerCase().replace(/\s+/g, ' ');
 
-    const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
-    const variantString = variantValues.join(' ').toLowerCase();
-    const matches = alt.includes(variantString) || variantValues.some((val) => alt.includes(val));
+    slideContainers.forEach((container, index) => {
+      const img = container.querySelector('img');
+      if (!img) return;
 
-    console.log(`🖼️ Image ${index + 1}: alt="${alt}" | Match: ${matches}`);
+      const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
+      const matches =
+        alt.includes(variantString) ||
+        variantValues.some((val) => alt.includes(val.toLowerCase().trim()));
 
-    const el = /** @type {HTMLElement} */ (container);
-    el.style.display = matches ? '' : 'none';
-  });
+      console.log(`🖼️ Image ${index + 1}: alt="${alt}" | Match: ${matches}`);
 
-  // 🔄 RELOAD the slideshow after variant filtering
-  const slideshowEl = this.querySelector('slideshow-component');
-  if (slideshowEl) {
-    console.log('♻️ Reinitializing slideshow...');
-    const newSlideshow = slideshowEl.cloneNode(true);
-    slideshowEl.replaceWith(newSlideshow);
-    // Ensure the custom element upgrades again
-    customElements.upgrade(newSlideshow);
-  }
+      const el = /** @type {HTMLElement} */ (container);
+      el.style.display = matches ? '' : 'none';
+    });
+
+    // 🔄 RELOAD the slideshow after variant filtering
+    const slideshowEl = this.querySelector('slideshow-component');
+    if (slideshowEl) {
+      console.log('♻️ Reinitializing slideshow after variant update...');
+      const newSlideshow = slideshowEl.cloneNode(true);
+      slideshowEl.replaceWith(newSlideshow);
+      // Re-upgrade to custom element definition
+      customElements.upgrade(newSlideshow);
+    }
+
+    console.log('✅ Media gallery filter applied successfully');
+  }, 250); // Adjust delay if needed (200–400ms works well)
 }
+
 
 
 
