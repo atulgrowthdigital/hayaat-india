@@ -18,7 +18,7 @@
           "settings": {
             "text": "<h1>{{ closest.page.title }}</h1>",
             "width": "100%",
-            "max_width": "normal",
+            "max_width": "narrow",
             "alignment": "left",
             "type_preset": "h2",
             "font": "var(--font-body--family)",
