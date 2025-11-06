@@ -79,18 +79,27 @@ export class MediaGallery extends Component {
    */
   filterSlidesByVariant(variantResource) {
     const variantValues = MediaGallery.extractVariantValues(variantResource);
+    console.log('🧩 Variant values:', variantValues);
+
     if (!variantValues.length) return;
     const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
-    slideContainers.forEach((container) => {
+
+    slideContainers.forEach((container, index) => {
       const img = container.querySelector('img');
       if (!img) return;
+
       const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
       const matches = variantValues.some(val => alt === val || alt.includes(val));
+
+      console.log(`🖼️ Image ${index + 1}: alt="${alt}" → Match: ${matches}`);
+
       const el = /** @type {HTMLElement} */ (container);
       if (!matches) {
         el.style.display = 'none';
+        console.log('❌ Hidden:', alt);
       } else {
         el.style.display = '';
+        console.log('✅ Visible:', alt);
       }
     });
   }
