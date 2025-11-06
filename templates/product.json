@@ -25,7 +25,7 @@
             "slideshow_mobile_controls_style": "dots",
             "thumbnail_position": "left",
             "thumbnail_width": 52,
-            "aspect_ratio": "1/1.25",
+            "aspect_ratio": "adapt",
             "constrain_to_viewport": false,
             "media_fit": "cover",
             "media_radius": 0,
@@ -284,7 +284,7 @@
               "settings": {
                 "icon": "plus",
                 "dividers": true,
-                "type_preset": "h3",
+                "type_preset": "h5",
                 "inherit_color_scheme": true,
                 "color_scheme": "",
                 "border": "none",
@@ -348,7 +348,7 @@
                     "text_M3VBQq": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>Our goal is for every customer to be totally satisfied with their purchase. If this isn't the case, let us know and we'll do our best to work with you to make it right.</p>",
+                        "text": "<p>Returns are accepted within 7 days of delivery. In case of damaged parcels, an unboxing video is required for verification.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
@@ -387,7 +387,7 @@
                     "text_7KF8DP": {
                       "type": "text",
                       "settings": {
-                        "text": "<p>We will work quickly to ship your order as soon as possible. Once your order has shipped, you will receive an email with further information. Delivery times vary depending on your location.</p>",
+                        "text": "<p>We strive to process and ship your order as quickly as possible. Delivery typically takes 7–10 days from the date of dispatch.</p>",
                         "width": "100%",
                         "max_width": "normal",
                         "alignment": "left",
