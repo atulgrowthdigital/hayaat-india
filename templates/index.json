@@ -192,12 +192,12 @@
             "horizontal_alignment": "center",
             "vertical_alignment": "flex-start",
             "collection_card_gap": 8,
-            "inherit_color_scheme": true,
+            "inherit_color_scheme": false,
             "color_scheme": "",
             "border": "none",
             "border_width": 1,
             "border_opacity": 100,
-            "border_radius": 0
+            "border_radius": 5
           },
           "blocks": {
             "collection_title_MbKUEr": {
@@ -219,7 +219,7 @@
                 "background_color": "#ffffff",
                 "corner_radius": 0,
                 "padding-block-start": 4,
-                "padding-block-end": 4,
+                "padding-block-end": 10,
                 "padding-inline-start": 8,
                 "padding-inline-end": 8
               },
@@ -260,7 +260,7 @@
         ],
         "layout_type": "grid",
         "carousel_on_mobile": false,
-        "columns": 6,
+        "columns": 3,
         "mobile_columns": "2",
         "mobile_card_size": "60cqw",
         "columns_gap": 20,
@@ -271,7 +271,7 @@
         "icons_shape": "none",
         "section_width": "page-width",
         "gap": 12,
-        "color_scheme": "",
+        "color_scheme": "scheme-0a31d5f7-3a6f-42e8-9b13-e3a6512717f0",
         "padding-block-start": 40,
         "padding-block-end": 50
       }
