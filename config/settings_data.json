@@ -41,7 +41,7 @@
     "type_size_h6": "14",
     "type_letter_spacing_h6": "heading-loose",
     "type_case_h6": "none",
-    "page_width": "normal",
+    "page_width": "narrow",
     "card_hover_effect": "scale",
     "badge_position": "top-right",
     "badge_corner_radius": 2,
