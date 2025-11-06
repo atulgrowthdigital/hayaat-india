@@ -78,44 +78,49 @@ export class MediaGallery extends Component {
    * @param {any} variantResource
    */
 filterSlidesByVariant(variantResource) {
-  // Delay filtering slightly to ensure the correct variant data and images are loaded
+  // Wait for DOM to update and the new color label to appear
   setTimeout(() => {
+    // 1️⃣ Try reading the color name from the DOM (most accurate)
+    let colorName = '';
+    const colorEl = document.querySelector('[data-option-index="0"] .product-form__selected-value, .product__selected-option, [data-selected-option="Color"]');
+    if (colorEl) {
+      colorName = colorEl.textContent.trim().toLowerCase();
+    }
+
+    // 2️⃣ Fallback to variantResource if colorName not found
     const variantValues = MediaGallery.extractVariantValues(variantResource);
-    console.log('🎨 Selected Variant Values:', variantValues);
+    const activeColor = colorName || variantValues[0] || '';
+    console.log('🎨 Active Variant Color:', activeColor);
+    console.log('🧩 All Variant Values:', variantValues);
 
-    if (!variantValues.length) return;
+    if (!activeColor) return;
 
+    // 3️⃣ Filter product media
     const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
-    const variantString = variantValues.join(' ').toLowerCase().replace(/\s+/g, ' ');
-
     slideContainers.forEach((container, index) => {
       const img = container.querySelector('img');
       if (!img) return;
 
       const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
-      const matches =
-        alt.includes(variantString) ||
-        variantValues.some((val) => alt.includes(val.toLowerCase().trim()));
+      const matches = alt.includes(activeColor);
 
       console.log(`🖼️ Image ${index + 1}: alt="${alt}" | Match: ${matches}`);
-
-      const el = /** @type {HTMLElement} */ (container);
-      el.style.display = matches ? '' : 'none';
+      container.style.display = matches ? '' : 'none';
     });
 
-    // 🔄 RELOAD the slideshow after variant filtering
+    // 4️⃣ Reload slideshow after filtering
     const slideshowEl = this.querySelector('slideshow-component');
     if (slideshowEl) {
       console.log('♻️ Reinitializing slideshow after variant update...');
       const newSlideshow = slideshowEl.cloneNode(true);
       slideshowEl.replaceWith(newSlideshow);
-      // Re-upgrade to custom element definition
       customElements.upgrade(newSlideshow);
     }
 
-    console.log('✅ Media gallery filter applied successfully');
-  }, 250); // Adjust delay if needed (200–400ms works well)
+    console.log('✅ Media gallery filter applied successfully for:', activeColor);
+  }, 400); // delay ensures DOM is ready (can adjust 300–500ms)
 }
+
 
 
 
