@@ -271,11 +271,11 @@
                 "btn_style": "style3",
                 "btn_width-type": "manual",
                 "btn_width": 440,
-                "btn_bg-color": "transparent",
-                "btn_border-color": "#000",
+                "btn_bg-color": "rgba(0,0,0,0)",
+                "btn_border-color": "#000000",
                 "btn_border-radius": 4,
                 "text_size": 16,
-                "text_color": "#000",
+                "text_color": "#000000",
                 "icon_color": "#ff0000",
                 "icon_size": 2
               }
@@ -431,6 +431,7 @@
                 },
                 "accordion_row_DbnCnN": {
                   "type": "_accordion-row",
+                  "disabled": true,
                   "settings": {
                     "heading": "Manufacturing",
                     "open_by_default": false,
