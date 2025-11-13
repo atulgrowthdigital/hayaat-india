@@ -4478,22 +4478,22 @@ text-component {
 
 
 .menu-drawer__featured-content-list {
-    display: grid;
-    margin: 0;
-    gap: 10px;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-    margin: 0;
-    padding: 20px;
+    display: grid !important;
+    margin: 0 !important;
+    gap: 10px !important;
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    margin: 0 !important;
+    padding: 20px !important;
     overflow:unset !important;
 }
 
 .menu-drawer__featured-content-list  .menu-drawer__featured-content-list-item.menu-drawer__featured-content-list-item--product {
-    width: 100%;
-    margin: 0;
-    padding: 10px;
-    background: #fff;
-    box-shadow: 0 0 10px #0000001f;
-    border-radius: 5px;
+    width: 100% !important;
+    margin: 0 !important;
+    padding: 10px !important;
+    background: #fff !important;
+    box-shadow: 0 0 10px #0000001f !important;
+    border-radius: 5px !important;
 }
 .menu-drawer {
   z-index:111;
