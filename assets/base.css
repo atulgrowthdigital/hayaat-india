@@ -4474,3 +4474,23 @@ text-component {
     width: 100%;
     padding-bottom: 5px !important;
 }
+
+
+
+.menu-drawer__featured-content-list {
+    display: grid;
+    margin: 0;
+    gap: 10px;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    margin: 0;
+    padding: 20px;
+}
+
+.menu-drawer__featured-content-list  .menu-drawer__featured-content-list-item.menu-drawer__featured-content-list-item--product {
+    width: 100%;
+    margin: 0;
+    padding: 10px;
+    background: #fff;
+    box-shadow: 0 0 10px #0000001f;
+    border-radius: 5px;
+}
