@@ -724,7 +724,7 @@
       "settings": {
         "product": "{{ closest.product }}",
         "recommendation_type": "related",
-        "layout_type": "grid",
+        "layout_type": "carousel",
         "carousel_on_mobile": false,
         "max_products": 4,
         "columns": 4,
@@ -732,7 +732,7 @@
         "columns_gap": 12,
         "rows_gap": 12,
         "icons_style": "arrow",
-        "icons_shape": "none",
+        "icons_shape": "square",
         "section_width": "page-width",
         "gap": 24,
         "color_scheme": "scheme-1",
