@@ -11,6 +11,36 @@
   "type": "header",
   "name": "t:names.header",
   "sections": {
+    "header_announcements_ggPnAB": {
+      "type": "header-announcements",
+      "blocks": {
+        "announcement_p4KfnR": {
+          "type": "_announcement",
+          "settings": {
+            "text": "Get 10% off on all prepaid orders",
+            "link": "",
+            "font": "var(--font-body--family)",
+            "font_size": "1rem",
+            "weight": "",
+            "letter_spacing": "normal",
+            "case": "none"
+          },
+          "blocks": {}
+        }
+      },
+      "block_order": [
+        "announcement_p4KfnR"
+      ],
+      "name": "t:names.announcement_bar",
+      "settings": {
+        "speed": 5,
+        "section_width": "page-width",
+        "color_scheme": "scheme-0a31d5f7-3a6f-42e8-9b13-e3a6512717f0",
+        "divider_width": 0,
+        "padding-block-start": 15,
+        "padding-block-end": 15
+      }
+    },
     "header_section": {
       "type": "header",
       "blocks": {
@@ -82,6 +112,7 @@
     }
   },
   "order": [
+    "header_announcements_ggPnAB",
     "header_section"
   ]
 }
