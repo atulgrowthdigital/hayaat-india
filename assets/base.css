@@ -4494,3 +4494,6 @@ text-component {
     box-shadow: 0 0 10px #0000001f;
     border-radius: 5px;
 }
+.menu-drawer {
+  z-index:99;
+}
