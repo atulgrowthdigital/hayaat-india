@@ -4507,6 +4507,6 @@ text-component {
 }
 @media (max-width: 480px) {
   .utilities {
-      gap: 10px;
+      gap: 10px !important;
   }
 }
