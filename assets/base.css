@@ -4505,3 +4505,8 @@ text-component {
     gap: 7px;
     align-items: center;
 }
+@media (max-width: 480px) {
+  .utilities {
+      gap: 10px;
+  }
+}
