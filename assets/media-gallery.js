@@ -94,26 +94,50 @@ filterSlidesByVariant(variantResource) {
     console.log('🎨 Active Variant Color:', activeColor);
     if (!activeColor) return;
 
-    // 3️⃣ Hide main media slides that don't match
-    const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
-    slideContainers.forEach((container, index) => {
-      const img = container.querySelector('img');
-      if (!img) return;
+// 3️⃣ Hide main media slides that don't match
+const slideContainers = Array.from(this.querySelectorAll('.product-media-container'));
 
-      const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
-      const matches = alt.includes(activeColor);
-      console.log(`🖼️ Image ${index + 1}: alt="${alt}" | Match: ${matches}`);
-      container.style.display = matches ? '' : 'none';
-    });
+let matchCount = 0;
 
-    // 4️⃣ Hide / update thumbnails that don’t match
-    const thumbButtons = Array.from(this.querySelectorAll('.slideshow-controls__thumbnails button'));
-    thumbButtons.forEach((thumb, index) => {
-      const alt = (thumb.querySelector('img')?.getAttribute('alt') || '').toLowerCase().trim();
-      const matches = alt.includes(activeColor);
-      thumb.style.display = matches ? '' : 'none';
-      thumb.setAttribute('aria-selected', matches && index === 0 ? 'true' : 'false');
-    });
+slideContainers.forEach((container, index) => {
+  const img = container.querySelector('img');
+  if (!img) return;
+
+  const alt = (img.getAttribute('alt') || '').toLowerCase().trim();
+  const matches = alt.includes(activeColor);
+
+  if (matches) matchCount++;
+
+  container.style.display = matches ? '' : 'none';
+});
+
+// ✅ If NO images match → show ALL images
+if (matchCount === 0) {
+  console.warn("⚠️ No variant-specific images found. Showing all images.");
+  slideContainers.forEach((container) => {
+    container.style.display = '';
+  });
+}
+
+
+// 4️⃣ Hide / update thumbnails
+const thumbButtons = Array.from(this.querySelectorAll('.slideshow-controls__thumbnails button'));
+let thumbMatchCount = 0;
+
+thumbButtons.forEach((thumb, index) => {
+  const alt = (thumb.querySelector('img')?.getAttribute('alt') || '').toLowerCase().trim();
+  const matches = alt.includes(activeColor);
+
+  if (matches) thumbMatchCount++;
+
+  thumb.style.display = matches ? '' : 'none';
+});
+
+// ✅ If no thumbnail matches → show all thumbnails
+if (thumbMatchCount === 0) {
+  thumbButtons.forEach(btn => btn.style.display = '');
+}
+
 
     // 5️⃣ Reinitialize slideshow after filtering
     const slideshowEl = this.querySelector('slideshow-component');
@@ -125,7 +149,7 @@ filterSlidesByVariant(variantResource) {
     }
 
     console.log('✅ Media gallery & thumbnails updated for:', activeColor);
-  }, 400); // Delay ensures DOM is fully updated
+  }, 900); // Delay ensures DOM is fully updated
 }
 
 
