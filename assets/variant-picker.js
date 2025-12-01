@@ -4,11 +4,15 @@ import { morph } from '@theme/morph';
 import { requestYieldCallback } from '@theme/utilities';
 
 /**
+ * @typedef {object} VariantPickerRefs
+ * @property {HTMLFieldSetElement[]} fieldsets – The fieldset elements.
+ */
+
+/**
  * A custom element that manages a variant picker.
  *
- * @template {import('@theme/component').Refs} [Refs = {}]
- *
- * @extends Component<Refs>
+ * @template {import('@theme/component').Refs} [TRefs=VariantPickerRefs]
+ * @extends Component<TRefs>
  */
 export default class VariantPicker extends Component {
   /** @type {string | undefined} */
@@ -17,8 +21,25 @@ export default class VariantPicker extends Component {
   /** @type {AbortController | undefined} */
   #abortController;
 
+  /** @type {number[][]} */
+  #checkedIndices = [];
+
+  /** @type {HTMLInputElement[][]} */
+  #radios = [];
+
   connectedCallback() {
     super.connectedCallback();
+    const fieldsets = /** @type {HTMLFieldSetElement[]} */ (this.refs.fieldsets || []);
+
+    fieldsets.forEach((fieldset) => {
+      const radios = Array.from(fieldset?.querySelectorAll('input') ?? []);
+      this.#radios.push(radios);
+
+      const initialCheckedIndex = radios.findIndex((radio) => radio.dataset.currentChecked === 'true');
+      if (initialCheckedIndex !== -1) {
+        this.#checkedIndices.push([initialCheckedIndex]);
+      }
+    });
 
     this.addEventListener('change', this.variantChanged.bind(this));
   }
@@ -89,6 +110,53 @@ export default class VariantPicker extends Component {
     }
 
     if (target instanceof HTMLInputElement) {
+      const fieldsetIndex = Number.parseInt(target.dataset.fieldsetIndex || '');
+      const inputIndex = Number.parseInt(target.dataset.inputIndex || '');
+
+      if (!Number.isNaN(fieldsetIndex) && !Number.isNaN(inputIndex)) {
+        const fieldsets = /** @type {HTMLFieldSetElement[]} */ (this.refs.fieldsets || []);
+        const fieldset = fieldsets[fieldsetIndex];
+        const checkedIndices = this.#checkedIndices[fieldsetIndex];
+        const radios = this.#radios[fieldsetIndex];
+
+        if (radios && checkedIndices && fieldset) {
+          // Clear previous checked states
+          const [currentIndex, previousIndex] = checkedIndices;
+
+          if (currentIndex !== undefined && radios[currentIndex]) {
+            radios[currentIndex].dataset.previousChecked = 'false';
+          }
+          if (previousIndex !== undefined && radios[previousIndex]) {
+            radios[previousIndex].dataset.previousChecked = 'false';
+          }
+
+          // Update checked indices array - keep only the last 2 selections
+          checkedIndices.unshift(inputIndex);
+          checkedIndices.length = Math.min(checkedIndices.length, 2);
+
+          // Update the new states
+          const newCurrentIndex = checkedIndices[0]; // This is always inputIndex
+          const newPreviousIndex = checkedIndices[1]; // This might be undefined
+
+          // newCurrentIndex is guaranteed to exist since we just added it
+          if (newCurrentIndex !== undefined && radios[newCurrentIndex]) {
+            radios[newCurrentIndex].dataset.currentChecked = 'true';
+            fieldset.style.setProperty(
+              '--pill-width-current',
+              `${radios[newCurrentIndex].parentElement?.offsetWidth || 0}px`
+            );
+          }
+
+          if (newPreviousIndex !== undefined && radios[newPreviousIndex]) {
+            radios[newPreviousIndex].dataset.previousChecked = 'true';
+            radios[newPreviousIndex].dataset.currentChecked = 'false';
+            fieldset.style.setProperty(
+              '--pill-width-previous',
+              `${radios[newPreviousIndex].parentElement?.offsetWidth || 0}px`
+            );
+          }
+        }
+      }
       target.checked = true;
     }
 
